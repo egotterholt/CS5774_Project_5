@@ -1,0 +1,81 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Lending Library | {% block page-title %}{% endblock %}</title>
+        <script src="{% static "js/jquery-3.7.1.min.js" %}"></script>
+        <script src="{% static "js/scripts.js" %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static "css/responsive.css" %}">
+    </head>
+    <body>
+
+    <!-- This wrapper makes it easy to chunk the main content container
+         into a block and size the height to fill the whole screen -->
+    <div id="wrapper">
+
+        <!-- Header section holds spacers to align the content, along with
+             the title and the login forms (where necessary) -->
+        <div id="header">
+            <div id="left-header">
+                <!-- Adjust width to center title -->
+            </div>
+
+            <div id="center-header">
+                <h1>Lending Library</h1>
+            </div><!-- #title-box -->
+
+            {% if request.session.username %}
+                <form id="right-header">
+                    <p>Logged in as <strong>{{ request.session.username }}</strong></p>
+                    <a href="{% url "library:logout" %}">Log Out</a>
+                </form>
+            {% else %}
+                <form id="right-header" action="{% url "library:login" %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="pw" placeholder="Password">
+                    <input type="submit" name="submit" value="Log In">
+                    <p>or</p>
+                    <a href="{% url "library:account" %}">Register</a>
+                </form>
+            {% endif %}
+
+        </div><!-- #header -->
+
+        <!-- This menu bar is the main navigation component of the website.
+             It offers users direct links to each of the main pages of the site. -->
+        <div id="menu-bar">
+            {% block primary-nav %}{% endblock %}
+
+            <form id="search-box" action="{% url "library:item-search" %}" method="get">
+                <input type="text" name="search-items" placeholder="Weed Eater">
+                <input type="submit" name="submit" class="selected" value="Search">
+            </form>
+        </div><!-- #menu-bar -->
+
+        <!-- The content section holds the main block of content (everything in between
+             the header and the footer). -->
+        <div id="content">
+            <div id="side-tabs">
+                {% block side-tabs %}{% endblock %}
+            </div><!-- #side-tabs -->
+
+            <div id="container">
+                {% block content %}{% endblock %}
+            </div><!-- #container -->
+
+            {% block right-content %}{% endblock %}
+        </div><!-- #content -->
+
+        <!-- Footer section holds a secondary navigation list with direct
+             links to main pages. Also holds the copyright notice -->
+        <div id="footer">
+            <p id="footer-nav"><a href="{% url "library:home" %}">Home</a> | <a href="{% url "library:item-list" %}">Items</a> | <a href="{% url "library:item-add" %}">Add Item</a> | <a href="{% url "library:account" %}">Account</a></p>
+            <p id="copyright">Copyright 2025 Lending Library. All rights reserved.</p>
+        </div><!-- #footer -->
+
+    </div><!-- #wrapper -->
+    </body>
+</html>

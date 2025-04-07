@@ -1,0 +1,42 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Search{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}">Home</a></li>
+        <li><a href="{% url "library:item-list" %}" class="selected">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+{% block side-tabs %}
+    <div id="side-tabs">
+        <ul id="full-list">
+            <li><a href="{% url "library:item-list" %}">Books</a></li>
+            <li><a href="{% url "library:item-list" %}">Games</a></li>
+            <li><a href="{% url "library:item-list" %}">Movies</a></li>
+            <li><a href="{% url "library:item-list" %}">Tools</a></li>
+            <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+        </ul>
+    </div><!-- #side-tabs -->
+{% endblock %}
+
+{% block content %}
+    <div id="home-content">
+        <h1>Search Results</h1>
+    </div>
+    <div id="items">
+
+        <!-- JS inserts search result items here -->
+
+    </div><!-- #items -->
+{% endblock %}
+
+{% block right-content %}
+    <div id="right-content">
+        <!-- Adjust width to center content -->
+    </div>
+{% endblock %}

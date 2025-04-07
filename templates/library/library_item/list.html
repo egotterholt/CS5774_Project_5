@@ -1,0 +1,45 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Items{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}">Home</a></li>
+        <li><a href="{% url "library:item-list" %}" class="selected">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+{% block side-tabs %}
+    <ul id="full-list">
+        <li><a href="{% url "library:item-list" %}">Books</a></li>
+        <li><a href="{% url "library:item-list" %}">Games</a></li>
+        <li><a href="{% url "library:item-list" %}">Movies</a></li>
+        <li><a href="{% url "library:item-list" %}" class="selected">Tools</a>
+            <ul id="sub-list">
+                <li><a href="{% url "library:item-list" %}">Cleaning</a></li>
+                <li><a href="{% url "library:item-list" %}">Construction</a></li>
+                <li><a href="{% url "library:item-list" %}" class="selected">Lawn</a></li>
+                <li><a href="{% url "library:item-list" %}">Outdoor</a></li>
+            </ul>
+        </li>
+        <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+<div id="items">
+    {% for item in items %}
+        {% if item.category == "Lawn" %}
+            <div class="item-box">
+                <h3 class="item-title">{{ item.title }}</h3>
+                <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+                <p class="item-period">{{ item.period }}</p>
+                <a href="{% url "library:item-detail" item.id %}" class="item-cost">${{ item.cost }}</a>
+            </div><!-- #item-box -->
+        {% endif %}
+    {% endfor %}
+</div><!-- #items -->
+{% endblock %}

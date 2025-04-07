@@ -1,0 +1,89 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Edit{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}">Home</a></li>
+        <li><a href="{% url "library:item-list" %}">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}" class="selected">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+{% block side-tabs %}
+    <div id="side-tabs">
+        <ul id="full-list">
+            <li><a href="{% url "library:item-list" %}">Books</a></li>
+            <li><a href="{% url "library:item-list" %}">Games</a></li>
+            <li><a href="{% url "library:item-list" %}">Movies</a></li>
+            <li><a href="{% url "library:item-list" %}">Tools</a></li>
+            <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+        </ul>
+    </div><!-- #side-tabs -->
+{% endblock %}
+
+{% block content %}
+    <div id="add-item-container">
+        <div id="add-item-title">
+            <h3>Title</h3>
+            <input type="text" name="title" value="{{ item.title }}">
+        </div>
+        <div id="add-item-details-container">
+            <div id="add-item-details">
+                <div id="add-item-image">
+                    <h3>Add Images Here</h3>
+                     <div id="item-details">
+                        <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+                     </div>
+                </div>
+                <div id="add-item-category">
+                    <h3>Choose a Category:</h3>
+                    <select name="categories" id="categories">
+                        <option value="books">Books</option>
+                        <option value="games">Games</option>
+                        <option value="movies">Movies</option>
+                        <option value="tools">Tools</option>
+                        <option value="tv-shows">TV Shows</option>
+                    </select>
+                </div>
+                <h3>Input Item Description</h3>
+                <textarea id="add-item-description" name="description">Describe your item in this text box. Add any information that you think a customer might need!</textarea>
+            </div><!-- #add-item-details -->
+            <div id="add-rental-details">
+                <div id="ratings">
+                    <h3>Your Rating</h3>
+                    <p>5 / 5 Stars</p>
+                </div>
+                <div id="rental-options-add">
+                    <h3>Length:</h3>
+                    <select name="days" id="days">
+                        <option value="2">2-day Rental</option>
+                        <option value="3">3-day Rental</option>
+                        <option value="4">4-day Rental</option>
+                        <option value="5">5-day Rental</option>
+                    </select>
+                    <div id="add-item-cost">
+                        <h3>Cost</h3>
+                        <input type="text" name="cost" value="{{ item.cost }}">
+                    </div>
+                    <h3>Blackout Dates</h3>
+                    <div id="final-options">
+                        <p>5-day Rental:<br>Starting 3/20,<br>Ending 3/25,<br>${{ item.cost }}</p>
+                    </div>
+                    <form action="{% url "library:account" %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" name="submit" value="Submit Updates">
+                    </form>
+                </div>
+            </div><!-- #add-rental-details -->
+        </div><!-- #add-item-details-container -->
+    </div><!-- #add-item-container -->
+{% endblock %}
+
+{% block right-content %}
+    <div id="right-content">
+        <!-- Adjust width to center content -->
+    </div>
+{% endblock %}

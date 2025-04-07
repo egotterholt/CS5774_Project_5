@@ -1,0 +1,71 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Library Items{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}">Home</a></li>
+        <li><a href="{% url "library:item-list" %}" class="selected">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+{% block side-tabs %}
+    <ul id="full-list">
+        <li><a href="{% url "library:item-list" %}">Books</a></li>
+        <li><a href="{% url "library:item-list" %}">Games</a></li>
+        <li><a href="{% url "library:item-list" %}">Movies</a></li>
+        <li><a href="{% url "library:item-list" %}" class="selected">Tools</a>
+            <ul id="sub-list">
+                <li><a href="{% url "library:item-list" %}">Cleaning</a></li>
+                <li><a href="{% url "library:item-list" %}">Construction</a></li>
+                <li><a href="{% url "library:item-list" %}" class="selected">Lawn</a></li>
+                <li><a href="{% url "library:item-list" %}">Outdoor</a></li>
+            </ul>
+        </li>
+        <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+<div id="selected-item-container">
+    <h1>{{ item.title }}</h1>
+    <div id="item-details-container">
+        <div id="item-details">
+            <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+            <p>
+                I am renting out my Echo gas-powered weed eater, purchased in 2021. Upon rental, this weed eater
+                comes with a fully loaded bump-head style string feeder as well as a full tank of gas. If more
+                string is needed for a larger job, I can suggest some good strings to look at in Lowe's or Home
+                Depot. I can provide more gas for $5 a tank if more is needed (does NOT take regular gas). <br><br>
+                The full gas tank should last about 2 hours of constant running. <br>The fully loaded string feeder
+                should last about 2 hours of regular use.
+            </p>
+        </div><!-- #item-details -->
+        <div id="rental-details">
+            <div id="ratings">
+                <h3>John's Rating</h3>
+                <p>5 / 5 Stars</p>
+                <h3>Product's Rating</h3>
+                <p>4.9 / 5 Stars</p>
+            </div>
+            <div id="rental-options">
+                <h3>Lending Start:</h3>
+                <p>03/20/2025</p>
+                <h3>Lending End:</h3>
+                <p>03/25/2025</p>
+                <div id="final-options">
+                    <p>5-day Rental:<br>Starting 3/20,<br>Ending 3/25,<br>${{ item.cost }}</p>
+                </div>
+                {% if request.session.username %}
+                    <input type="submit" name="submit" value="Rent from John - ${{ item.cost }}">
+                {% else %}
+                    <a href="{% url "library:account" %}" id="register-item">Register to rent from John</a>
+                {% endif %}
+            </div>
+        </div><!-- #rental-details -->
+    </div><!-- #item-details-container -->
+</div><!-- #selected-item-container -->
+{% endblock %}

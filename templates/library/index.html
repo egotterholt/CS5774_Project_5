@@ -1,0 +1,56 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Library Items{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}" class="selected">Home</a></li>
+        <li><a href="{% url "library:item-list" %}">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+{% block side-tabs %}
+    <ul id="full-list">
+        <li><a href="{% url "library:item-list" %}">Books</a></li>
+        <li><a href="{% url "library:item-list" %}">Games</a></li>
+        <li><a href="{% url "library:item-list" %}">Movies</a></li>
+        <li><a href="{% url "library:item-list" %}">Tools</a></li>
+        <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div id="home-content">
+        <p>Welcome to the online Lending Library, where you can rent, borrow, or purchase <br>many different types of items from around your neighborhood!</p>
+        <p>Get started with a search for local tools, books, games, etc.!</p>
+    </div>
+    <div id="items">
+        <h1 id="left-arrow">
+            &lt;
+        </h1>
+
+        {% for item in items %}
+            {% if forloop.counter <= 3 %}
+                <div class="item-box">
+                    <h3 class="item-title">{{ item.title }}</h3>
+                    <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+                    <p class="item-period">{{ item.period }}</p>
+                    <a href="{% url "library:item-detail" item.id %}" class="item-cost">${{ item.cost }}</a>
+                </div><!-- #item-box -->
+            {% endif %}
+        {% endfor %}
+
+        <h1 id="right-arrow">
+            &gt;
+        </h1>
+    </div><!-- #items -->
+{% endblock %}
+
+{% block right-content %}
+    <div id="right-content">
+        <!-- Adjust width to center content -->
+    </div>
+{% endblock %}
