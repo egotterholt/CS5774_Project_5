@@ -80,27 +80,98 @@ function searchResults() {
 // When the rent button is clicked on an item page, display popup information
 function rentalNotice(active) {
     $('div#rental-options input[type="submit"]').click(function () {
-        var className = $(this).attr('class');
-        var ownerRating = $(this).parent().siblings('#ratings').children('h3:first').text();
-        var ownerName = ownerRating.slice(0, ownerRating.indexOf('\''));
+        // var className = $(this).attr('class');
+        // var ownerRating = $(this).parent().siblings('#ratings').children('h3:first').text();
+        // var ownerName = ownerRating.slice(0, ownerRating.indexOf('\''));
+        //
+        // if (!active) {
+        //     active = true;
+        //     if (className != 'disabled') {
+        //         var rentalMsg = '<p>Renting from ' + ownerName + '</p>';
+        //         $(this).addClass('disabled');
+        //         $(rentalMsg).appendTo($(this).parent().parent()).fadeOut(3000, function () {
+        //             $(rentalMsg).remove();
+        //             active = false;
+        //         });
+        //     } else {
+        //         var disabledMsg = '<p>Already renting from ' + ownerName + '</p>';
+        //         $(disabledMsg).appendTo($(this).parent().parent()).fadeOut(3000, function () {
+        //             $(disabledMsg).remove();
+        //             active = false;
+        //         });
+        //     }
+        // }
 
-        if (!active) {
-            active = true;
-            if (className != 'disabled') {
-                var rentalMsg = '<p>Renting from ' + ownerName + '</p>';
-                $(this).addClass('disabled');
-                $(rentalMsg).appendTo($(this).parent().parent()).fadeOut(3000, function () {
-                    $(rentalMsg).remove();
-                    active = false;
-                });
+
+        var item_id = $(this).attr('data-item-id');
+        var owner = $(this).attr('data-item-owner');
+        var rented_by = $(this).attr('data-item-rented-by');
+        var ajax_url = $(this).attr('data-ajax-url');
+
+        // Using the core $.ajax() method
+        $.ajax({
+
+            // The URL for the request
+            url: ajax_url,
+
+            // The data to send (will be converted to a query string)
+            data: {
+                item_id: item_id,
+            },
+
+            // Whether this is a POST or GET request
+            type: "POST",
+
+            // The type of data we expect back
+            dataType : "json",
+
+            headers: {'X-CSRFToken': csrftoken},
+
+            context: this
+        })
+        // Code to run if the request succeeds (is done);
+        // The response is passed to the function
+        .done(function( json ) {
+            // alert("Request received successfully");
+            if (json.success === 'success') {
+                var className = $(this).attr('class');
+
+                if (!active) {
+                    active = true;
+                    if (className !== 'disabled') {
+                        var rentalMsg = '<p>Now renting from ' + owner + '</p>';
+                        $(this).addClass('disabled');
+                        $(rentalMsg).appendTo($(this).parent().parent()).fadeOut(5000, function () {
+                            $(rentalMsg).remove();
+                            active = false;
+                        });
+                        // alert("Now renting from " + owner )
+                    } else {
+                        var disabledMsg = '<p>Already renting from ' + owner + '</p>';
+                        $(disabledMsg).appendTo($(this).parent().parent()).fadeOut(5000, function () {
+                            $(disabledMsg).remove();
+                            active = false;
+                        });
+                        // alert("Already renting from " + owner )
+                    }
+                }
             } else {
-                var disabledMsg = '<p>Already renting from ' + ownerName + '</p>';
-                $(disabledMsg).appendTo($(this).parent().parent()).fadeOut(3000, function () {
-                    $(disabledMsg).remove();
-                    active = false;
-                });
+                alert("Error: " + json.error);
             }
-        }
+        })
+        // Code to run if the request fails; the raw request and
+        // status codes are passed to the function
+        .fail(function( xhr, status, errorThrown ) {
+            alert( "Sorry, there was a problem!" );
+            // console.log( "Error: " + errorThrown );
+            // console.log( "Status: " + status );
+            // console.dir( xhr );
+        })
+        // Code to run regardless of success or failure;
+        .always(function( xhr, status ) {
+            // alert( "The request is complete!" );
+        });
+
     })
 }
 
@@ -115,3 +186,20 @@ function deleteWarning() {
         }
     })
 }
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');

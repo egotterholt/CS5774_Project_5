@@ -34,23 +34,21 @@
         </div>
         <div id="items">
             {% for item in items %}
-                {% if forloop.counter <= 3 %}
-                    <div class="item-box">
-                        <h3 class="item-title">{{ item.title }}</h3>
-                        <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
-                        <p class="item-period">{{ item.period }}</p>
-                        <form action="{% url "library:account-item-delete" item.id %}" method="POST">
-                            {% csrf_token %}
-                            <p>
-                                <a href="{% url "library:account-item-detail" item.id %}" class="account-item-info">Info</a>
-                                | <a href="{% url "library:account-item-edit" item.id %}" class="account-item-edit">Edit</a>
-                                {% if request.session.role == "admin" %}
-                                    | <input type="submit" name="delete" id="account-item-delete" value="Delete">
-                                {% endif %}
-                            </p>
-                        </form>
-                    </div><!-- #item-box -->
-                {% endif %}
+                <div class="item-box">
+                    <h3 class="item-title">{{ item.title }}</h3>
+                    <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+                    <p class="item-period">{{ item.period }}-day Rental</p>
+                    <form action="{% url "library:account-item-delete" item.id %}" method="POST">
+                        {% csrf_token %}
+                        <p>
+                            <a href="{% url "library:account-item-detail" item.id %}" class="account-item-info">Info</a>
+                            | <a href="{% url "library:account-item-edit" item.id %}" class="account-item-edit">Edit</a>
+{#                            {% if request.session.role == "admin" %}#}
+                                | <input type="submit" name="delete" id="account-item-delete" value="Delete">
+{#                            {% endif %}#}
+                        </p>
+                    </form>
+                </div><!-- #item-box -->
             {% endfor %}
         </div><!-- #items -->
 

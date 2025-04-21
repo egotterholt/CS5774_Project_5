@@ -30,16 +30,28 @@
 {% endblock %}
 
 {% block content %}
-<div id="items">
-    {% for item in items %}
-        {% if item.category == "Lawn" %}
-            <div class="item-box">
-                <h3 class="item-title">{{ item.title }}</h3>
-                <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
-                <p class="item-period">{{ item.period }}</p>
-                <a href="{% url "library:item-detail" item.id %}" class="item-cost">${{ item.cost }}</a>
-            </div><!-- #item-box -->
-        {% endif %}
-    {% endfor %}
-</div><!-- #items -->
+    <form method="GET" action="{% url 'library:item-list' %}">
+        <div class="filters">
+            <button type="submit" name="sort" value="cost_low">Sort by Low Cost</button>
+            <button type="submit" name="sort" value="cost_high">Sort by High Cost</button>
+            <button type="submit" name="sort" value="rating_low">Sort by Low Rating</button>
+            <button type="submit" name="sort" value="rating_high">Sort by High Rating</button>
+            <button type="submit" name="product_rating" value="3">Product 3+ Stars</button>
+            <button type="submit" name="product_rating" value="4">Product 4+ Stars</button>
+            <button type="submit" name="owner_rating" value="3">Owner 3+ Stars</button>
+            <button type="submit" name="owner_rating" value="4">Owner 4+ Stars</button>
+        </div>
+    </form>
+    <div id="items">
+        {% for item in items %}
+            {% if item.category|lower == "lawn" %}
+                <div class="item-box">
+                    <h3 class="item-title">{{ item.title }}</h3>
+                    <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+                    <p class="item-period">{{ item.period }}-day Rental | {{ item.product_rating }} / 5 Stars</p>
+                    <a href="{% url "library:item-detail" item.id %}" class="item-cost">${{ item.cost }}</a>
+                </div><!-- #item-box -->
+            {% endif %}
+        {% endfor %}
+    </div><!-- #items -->
 {% endblock %}

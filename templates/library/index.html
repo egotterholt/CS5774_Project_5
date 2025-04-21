@@ -37,7 +37,7 @@
                 <div class="item-box">
                     <h3 class="item-title">{{ item.title }}</h3>
                     <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
-                    <p class="item-period">{{ item.period }}</p>
+                    <p class="item-period">{{ item.period }}-day Rental</p>
                     <a href="{% url "library:item-detail" item.id %}" class="item-cost">${{ item.cost }}</a>
                 </div><!-- #item-box -->
             {% endif %}

@@ -143,6 +143,7 @@ input[type='submit'].disabled:hover {
     text-align: center;
     height: 2em;
     max-width: 6.25em;
+    border-radius: 0.5em;
 }
 
 /* Search box in nav bar */
@@ -196,6 +197,22 @@ input.selected {
 }
 
 /* List */
+.filters {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.filters button {
+    margin: 0.125em;
+    height: 3em;
+    width: 6em;
+}
+
 #items {
     display: flex;
     flex-direction: row;
@@ -239,6 +256,7 @@ input.selected {
     height: 100%;
     margin-bottom: 0.625em;
     text-align: center;
+    border-radius: 0.5em;
 }
 
 #items h1 {
@@ -250,6 +268,30 @@ input.selected {
 }
 
 /* Selected item */
+ul.messages {
+    font-weight: bold;
+    padding: 1em;
+    margin: 0;
+    list-style: none;
+}
+
+ul.messages li {
+    padding: 1em;
+    margin: 0.25em;
+}
+
+ul.messages li.success {
+    background-color: lightgreen;
+}
+
+ul.messages li.info {
+    background-color: royalblue;
+}
+
+ul.messages li.warning {
+    background-color: palevioletred;
+}
+
 #selected-item-container {
     margin: 0;
     display: flex;
@@ -265,6 +307,15 @@ input.selected {
     width: 100%;
     align-items: center;
     justify-content: center;
+}
+
+#edit-details {
+    margin: 1em;
+}
+
+#edit-item {
+    padding: 0.25em 1em;
+    border-radius: 0.5em;
 }
 
 #ratings, #rental-details, #item-details {
@@ -316,6 +367,7 @@ input.selected {
 #rental-options input[type='submit'] {
     width: 100%;
     max-width: fit-content;
+    border-radius: 0.5em;
 }
 
 #rental-options h3, #ratings h3, #ratings p {
@@ -333,17 +385,21 @@ input.selected {
 }
 
 #register-item {
-    height: 3.5em;
+    height: 100%;
+    padding: 0.25em 0.5em;
+    border-radius: 0.5em;
 }
 
 input[type='submit']#account-item-delete {
     height: 2.45em;
     width: 3.5em;
+    border-radius: 0.5em;
 }
 
 #rental-options-add input[type='submit'] {
     width: 100%;
     max-width: fit-content;
+    border-radius: 0.5em;
 }
 
 #rental-options-add h3, #ratings h3, #ratings p {
@@ -547,6 +603,7 @@ textarea {
         margin-bottom: 0.3125em;
         max-width: 15.625em;
         font-size: inherit;
+        border-radius: 0.5em;
     }
 
     #right-header a {
@@ -556,6 +613,7 @@ textarea {
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 0.5em;
     }
 
     #right-header p {
@@ -594,16 +652,20 @@ textarea {
     #side-tabs li {
         text-decoration: none;
         list-style-type: none;
-        padding-left: 0.625em;
         background-color: var(--text-color-2);
     }
 
     #side-tabs li a {
         height: 2.1875em;
+        padding-left: 0.5em;
         display: flex;
-        width: 100%;
+        width: 12em;
         justify-content: left;
         align-items: center;
+    }
+
+    #sub-list li a {
+        width: 9.5em;
     }
 
     #side-tabs li a:hover {
@@ -624,6 +686,22 @@ textarea {
         display: flex;
         order: 3;
         width: 12.5%;
+    }
+
+    .filters {
+        margin-top: 2em;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .filters button {
+        margin: 0 1em 0 1em;
+        height: 3em;
+        width: 6em;
+        border-radius: 0.5em;
     }
 
     #items h1 {

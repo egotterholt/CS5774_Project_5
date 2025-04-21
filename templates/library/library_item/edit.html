@@ -25,61 +25,64 @@
 {% endblock %}
 
 {% block content %}
-    <div id="add-item-container">
-        <div id="add-item-title">
-            <h3>Title</h3>
-            <input type="text" name="title" value="{{ item.title }}">
-        </div>
-        <div id="add-item-details-container">
-            <div id="add-item-details">
-                <div id="add-item-image">
-                    <h3>Add Images Here</h3>
-                     <div id="item-details">
-                        <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
-                     </div>
-                </div>
-                <div id="add-item-category">
-                    <h3>Choose a Category:</h3>
-                    <select name="categories" id="categories">
-                        <option value="books">Books</option>
-                        <option value="games">Games</option>
-                        <option value="movies">Movies</option>
-                        <option value="tools">Tools</option>
-                        <option value="tv-shows">TV Shows</option>
-                    </select>
-                </div>
-                <h3>Input Item Description</h3>
-                <textarea id="add-item-description" name="description">Describe your item in this text box. Add any information that you think a customer might need!</textarea>
-            </div><!-- #add-item-details -->
-            <div id="add-rental-details">
-                <div id="ratings">
-                    <h3>Your Rating</h3>
-                    <p>5 / 5 Stars</p>
-                </div>
-                <div id="rental-options-add">
-                    <h3>Length:</h3>
-                    <select name="days" id="days">
-                        <option value="2">2-day Rental</option>
-                        <option value="3">3-day Rental</option>
-                        <option value="4">4-day Rental</option>
-                        <option value="5">5-day Rental</option>
-                    </select>
-                    <div id="add-item-cost">
-                        <h3>Cost</h3>
-                        <input type="text" name="cost" value="{{ item.cost }}">
+    <form id="add-item" action="{% url "library:account-item-edit" item.id %}" method="post">
+        {% csrf_token %}
+        <div id="add-item-container">
+            <div id="add-item-title">
+                <h3>Title</h3>
+                <input type="text" name="title" value="{{ item.title }}">
+            </div>
+            <div id="add-item-details-container">
+                <div id="add-item-details">
+                    <div id="add-item-image">
+                        <h3>Add Images Here</h3>
+                         <div id="item-details">
+                            <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
+                         </div>
                     </div>
-                    <h3>Blackout Dates</h3>
-                    <div id="final-options">
-                        <p>5-day Rental:<br>Starting 3/20,<br>Ending 3/25,<br>${{ item.cost }}</p>
+                    <div id="add-item-category">
+                        <h3>Choose a Category:</h3>
+                        <select name="categories" id="categories">
+                            <option value="books">Books</option>
+                            <option value="games">Games</option>
+                            <option value="movies">Movies</option>
+                            <option value="tools">Tools</option>
+                            <option value="tv-shows">TV Shows</option>
+                        </select>
                     </div>
-                    <form action="{% url "library:account" %}" method="POST">
-                        {% csrf_token %}
-                        <input type="submit" name="submit" value="Submit Updates">
-                    </form>
-                </div>
-            </div><!-- #add-rental-details -->
-        </div><!-- #add-item-details-container -->
-    </div><!-- #add-item-container -->
+                    <h3>Input Item Description</h3>
+                    <textarea id="add-item-description" name="description">Describe your item in this text box. Add any information that you think a customer might need!</textarea>
+                </div><!-- #add-item-details -->
+                <div id="add-rental-details">
+                    <div id="ratings">
+                        <h3>Your Rating</h3>
+                        <p>{{ item.owner_rating }} / 5 Stars</p>
+                    </div>
+                    <div id="rental-options-add">
+                        <h3>Length:</h3>
+                        <select name="days" id="days">
+                            <option value="2">2-day Rental</option>
+                            <option value="3">3-day Rental</option>
+                            <option value="4">4-day Rental</option>
+                            <option value="5">5-day Rental</option>
+                        </select>
+                        <div id="add-item-cost">
+                            <h3>Cost</h3>
+                            <input type="text" name="cost" value="{{ item.cost }}">
+                        </div>
+                        <h3>Blackout Dates:</h3>
+                        <div id="final-options">
+                            <p>{{ item.period }}-day Rental:<br>Starting 3/20,<br>Ending 3/25,<br>${{ item.cost }}</p>
+                        </div>
+                        <form action="{% url "library:account" %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" name="submit" value="Submit Updates">
+                        </form>
+                    </div>
+                </div><!-- #add-rental-details -->
+            </div><!-- #add-item-details-container -->
+        </div><!-- #add-item-container -->
+    </form>
 {% endblock %}
 
 {% block right-content %}
