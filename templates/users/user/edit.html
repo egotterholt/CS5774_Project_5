@@ -26,62 +26,43 @@
 {% endblock %}
 
 {% block content %}
-{#    {% if request.session.username %}#}
-{##}
-{#        <div id="home-content">#}
-{#            <p>Welcome to your Lending Library account page, <strong>{{ request.session.username }}</strong>!<br>#}
-{#            Here you can manage your profile by adding, editing, or deleting items.</p>#}
-{#        </div>#}
-{#        <div id="items">#}
-{#            {% for item in items %}#}
-{#                <div class="item-box">#}
-{#                    <h3 class="item-title">{{ item.title }}</h3>#}
-{#                    <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->#}
-{#                    <p class="item-period">{{ item.period }}-day Rental</p>#}
-{#                    <form action="{% url "library:account-item-delete" item.id %}" method="POST">#}
-{#                        {% csrf_token %}#}
-{#                        <p>#}
-{#                            <a href="{% url "library:account-item-detail" item.id %}" class="account-item-info">Info</a>#}
-{#                            | <a href="{% url "library:account-item-edit" item.id %}" class="account-item-edit">Edit</a>#}
-{#                            | <input type="submit" name="delete" id="account-item-delete" value="Delete">#}
-{#                        </p>#}
-{#                    </form>#}
-{#                </div><!-- #item-box -->#}
-{#            {% endfor %}#}
-{#        </div><!-- #items -->#}
-{##}
-{#    {% else %}#}
-
-        <div id="add-user">
-            <h2>Editing {{ user.username }}'s Lending Library Profile</h2>
-            <form id="login-box" action="{% url "users:profile-edit" user.username %}" method="post">
+    <div id="add-user">
+        <h2>Editing {{ user.username }}'s Lending Library Profile</h2>
+        <form id="login-box" action="{% url "users:profile-edit" user.username %}" method="post">
+            <div class="user-info">
+                <label for="register-first-name">First Name</label>
+                <input id="register-first-name" type="text" name="first-name" placeholder="{{ user.first_name }}">
+            </div>
+            <div class="user-info">
+                <label for="register-last-name">Last Name</label>
+                <input id="register-last-name" type="text" name="last-name" placeholder="{{ user.last_name }}">
+            </div>
+            <div class="user-info">
+                <label for="register-location">Location</label>
+                <input id="register-location" type="text" name="location" placeholder="{{ user.details.location }}">
+            </div>
+            <div class="user-info">
+                <label for="register-email">Email</label>
+                <input id="register-email" type="text" name="email" placeholder="{{ user.email }}">
+            </div>
+            <div class="user-info">
+                <label for="register-password">Password</label>
+                <input id="register-password" type="password" name="password" placeholder="Password">
+            </div>
+            {% if request.session.role == "admin" %}
                 <div class="user-info">
-                    <label for="register-first-name">First Name</label>
-                    <input id="register-first-name" type="text" name="first-name" placeholder="{{ user.first_name }}">
+                    <label for="register-role">Role</label>
+                    <select name="role" id="register-role">
+                        <option value="regular">regular</option>
+                        <option value="admin">admin</option>
+                    </select>
                 </div>
-                <div class="user-info">
-                    <label for="register-last-name">Last Name</label>
-                    <input id="register-last-name" type="text" name="last-name" placeholder="{{ user.last_name }}">
-                </div>
-                <div class="user-info">
-                    <label for="register-location">Location</label>
-                    <input id="register-location" type="text" name="location" placeholder="{{ user.details.location }}">
-                </div>
-                <div class="user-info">
-                    <label for="register-email">Email</label>
-                    <input id="register-email" type="text" name="email" placeholder="{{ user.email }}">
-                </div>
-                <div class="user-info">
-                    <label for="register-password">Password</label>
-                    <input id="register-password" type="password" name="password" placeholder="Password">
-                </div>
-                <input id="register-button" type="submit" name="submit" value="Save Edits">
-                <input id="register-button" type="submit" name="submit" value="Cancel Edits">
-                {% csrf_token %}
-            </form>
-        </div>
-{#    {% endif %}#}
-
+            {% endif %}
+            <input id="register-button" type="submit" name="submit" value="Save Edits">
+            <input id="register-button" type="submit" name="submit" value="Cancel Edits">
+            {% csrf_token %}
+        </form>
+    </div>
 {% endblock %}
 
 {% block right-content %}

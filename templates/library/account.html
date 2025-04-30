@@ -57,6 +57,19 @@
             <h3>Oops! There's nothing here! Add a new item to populate this list!</h3>
         {% endif %}
     </div><!-- #items -->
+    {% if actions.count > 0 %}
+        <div id="account-actions">
+            <div id="profile-actions">
+                <h3><strong>Account Activity</strong></h3>
+                <dl>
+                    {% for action in actions %}
+                        <dd><a href="{{ action.user.get_absolute_url }}">{{ action.user.username }}</a> | {{ action.created }}</dd>
+                        <dt><p>{{ action.verb }} <a href="{{ action.target.get_absolute_url }}">"{{ action.target }}"</a></p></dt>
+                    {% endfor %}
+                </dl>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block right-content %}

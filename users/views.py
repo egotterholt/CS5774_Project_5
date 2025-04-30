@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from actions.models import Action
@@ -10,7 +11,7 @@ from users.models import Details
 # Create your views here.
 def profile(request, username):
     user1 = get_object_or_404(User, username=username)
-    actions = Action.objects.all().order_by('-created').filter(user=user1)
+    actions = Action.objects.all().order_by('-created').filter(Q(user=user1) | Q(target_id=user1.id))
     return render(request,
               "users/user/profile.html",
                   {"user": user1, "actions": actions}
@@ -47,6 +48,14 @@ def register(request):
             user.details.save()
 
             messages.add_message(request, messages.SUCCESS, "You have registered with the username: %s" % user.username)
+
+            # Edit user action added into the DB
+            action = Action(
+                user=user,
+                verb="registered a new user",
+                target=user
+            )
+            action.save()
 
             userLogin = authenticate(username=username, password=password)
             if userLogin is not None:
@@ -108,6 +117,7 @@ def profile_edit(request, username):
             location = request.POST.get('location')
             first_name = request.POST.get('first-name')
             last_name = request.POST.get('last-name')
+            role = request.POST.get('role')
 
             user1 = get_object_or_404(User, username=username)
             if email:
@@ -131,6 +141,10 @@ def profile_edit(request, username):
                 if last_name != "" and last_name != user1.last_name:
                     user1.last_name = last_name
                     print("Updated last_name")
+            if role:
+                if role != "" and role != user1.details.role:
+                    user1.details.role = role
+                    print("Updated role")
             if password:
                 if password != "":
                     user1.password = password
@@ -138,6 +152,15 @@ def profile_edit(request, username):
 
             user1.save()
             user1.details.save()
+
+            # Edit user action added into the DB
+            user = User.objects.get(username=request.session.get("username"))
+            action = Action(
+                user=user,
+                verb="edited a user",
+                target=user1
+            )
+            action.save()
 
             messages.add_message(request, messages.SUCCESS, "You have edited %s's profile" % username)
 
@@ -165,6 +188,16 @@ def profile_delete(request, username):
                 user.delete()
                 user1.delete()
                 messages.add_message(request, messages.SUCCESS, "You have deleted successfully.")
+
+                # Delete user action added into the DB
+                user = User.objects.get(username=request.session.get("username"))
+                action = Action(
+                    user=user,
+                    verb="deleted a user",
+                    target=user1
+                )
+                action.save()
+
                 break
 
     return redirect("library:home")

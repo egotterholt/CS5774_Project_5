@@ -321,6 +321,15 @@ ul.messages li.warning {
     justify-content: center;
 }
 
+#account-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
 #profile-actions {
     display: flex;
     flex-direction: column;

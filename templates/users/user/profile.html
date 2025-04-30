@@ -52,7 +52,7 @@
             {% csrf_token %}
             <p id="item-selections">
                 <a href="{% url "users:profile-items" user.username %}" class="account-item-info">Items</a>
-                {% if request.session.role == "admin" or request.session.username == user.username%}
+                {% if request.session.role == "admin" or request.session.username == user.username %}
                     | <a href="{% url "users:profile-edit" user.username %}" class="account-item-info">Edit</a>
                     | <input type="submit" name="delete" id="account-item-delete" value="Delete">
                 {% endif %}

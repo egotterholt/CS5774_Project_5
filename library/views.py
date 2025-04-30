@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
@@ -261,10 +262,13 @@ def account(request):
 
     if username:
         user1 = get_object_or_404(User, username=username)
+        items = library_items.filter(user=user1)
+        actions = Action.objects.all().order_by('-created').filter(target_id__in=items)
+
         if user1.details.role == "admin":
             return render(request,
                    "library/account.html",
-                          { "items": library_items, "user": user1 }
+                          { "items": library_items, "user": user1, "actions": actions }
                           )
 
         elif user1.details.role == "regular":
@@ -273,7 +277,7 @@ def account(request):
             print(library_items.count())
             return render(request,
                    "library/account.html",
-                          { "items": library_items, "user": user1 }
+                          { "items": library_items, "user": user1, "actions": actions }
                           )
     return render(request,
            "library/account.html"
