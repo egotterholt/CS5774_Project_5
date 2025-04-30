@@ -114,8 +114,20 @@ input[type='submit'].disabled:hover {
 }
 
 #right-header a, #right-header input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     margin-bottom: 0.3125em;
-    padding: 0;
+    border-radius: 0.5em;
+}
+
+.profile-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 0.5em;
 }
 
 /* Navigation menu bar */
@@ -250,7 +262,7 @@ input.selected {
     margin: 0.625em auto;
 }
 
-.item-box a {
+.item-cost {
     width: 50%;
     padding: 0.625em;
     height: 100%;
@@ -309,6 +321,114 @@ ul.messages li.warning {
     justify-content: center;
 }
 
+#profile-actions {
+    display: flex;
+    flex-direction: column;
+    width: 50em;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#profile-actions h3, #profile-actions dl, #profile-actions input {
+    margin: 0 0 0.5em 0;
+}
+
+#profile-actions dl {
+    margin: 0 0 0.5em 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+}
+
+#profile-actions dt, #profile-actions dt p {
+    width: 100%;
+    margin: 0 0 0.5em 0;
+}
+
+#profile-actions dd {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+#profile-actions dd a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 5em;
+    min-width: fit-content;
+    border-radius: 0.5em;
+}
+
+#profile-actions dt {
+    margin: 0;
+    display: inline;
+}
+
+#profile-actions dt a {
+    display: inline;
+    border-radius: 0.5em;
+    padding: 0 0.25em;
+}
+
+#profile-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#edit-profile dd {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#edit-profile dd input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+#edit-profile-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#add-item-comment, #edit-item-comment, #delete-item-comment {
+    width: 100%;
+    max-width: fit-content;
+    padding: 0.25em 1em;
+    border-radius: 0.5em;
+}
+
+#add-comment-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 #edit-details {
     margin: 1em;
 }
@@ -350,10 +470,6 @@ ul.messages li.warning {
     margin-bottom: 2em;
 }
 
-#rental-details p, #rental-details h3 {
-    margin: 0 0 0.625em 0;
-}
-
 #rental-options {
     border: 1px solid var(--text-color-2);
     width: 50%;
@@ -370,8 +486,20 @@ ul.messages li.warning {
     border-radius: 0.5em;
 }
 
-#rental-options h3, #ratings h3, #ratings p {
+#rental-options h3, #rental-options-add h3, #ratings p,
+#rental-details p, #rental-details h3 {
     margin: 0 0 0.625em 0;
+}
+
+.owner-profile, .owner-profile a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 0.3125em 0 0.3125em;
+    border-radius: 0.5em;
+    width: 100%;
+    margin: 0;
 }
 
 #rental-options-add {
@@ -390,7 +518,31 @@ ul.messages li.warning {
     border-radius: 0.5em;
 }
 
-input[type='submit']#account-item-delete {
+#register-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: fit-content;
+    padding: 0.25em 0.5em;
+    border-radius: 0.5em;
+}
+
+#item-selections {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#item-selections input[type='submit']#account-item-delete,
+#item-selections a.account-item-info,
+#item-selections a.account-item-edit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     height: 2.45em;
     width: 3.5em;
     border-radius: 0.5em;
@@ -400,10 +552,6 @@ input[type='submit']#account-item-delete {
     width: 100%;
     max-width: fit-content;
     border-radius: 0.5em;
-}
-
-#rental-options-add h3, #ratings h3, #ratings p {
-    margin: 0 0 0.625em 0;
 }
 
 #final-options {
@@ -593,31 +741,24 @@ textarea {
         align-items: end;
         width: 12.5%;
         font-size: medium;
+        padding-right: 0.625em;
     }
 
-    #right-header input[type='text'],
-    #right-header input[type='password'],
-    #right-header input[type='submit'] {
-        margin-right: 0.625em;
+    #right-header input {
         display: block;
         margin-bottom: 0.3125em;
-        max-width: 15.625em;
+        max-width: 8.625em;
         font-size: inherit;
         border-radius: 0.5em;
     }
 
     #right-header a {
-        margin-right: 0.625em;
         width: 6.25em;
         height: 1.5625em;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 0.5em;
-    }
-
-    #right-header p {
-        margin-right: 3.125em;
     }
 
     #search-box input[name="search-items"] {

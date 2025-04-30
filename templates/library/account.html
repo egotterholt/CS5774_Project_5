@@ -26,13 +26,18 @@
 {% endblock %}
 
 {% block content %}
-    {% if request.session.username %}
-
+    {% if request.session.username == user.username %}
         <div id="home-content">
             <p>Welcome to your Lending Library account page, <strong>{{ request.session.username }}</strong>!<br>
             Here you can manage your profile by adding, editing, or deleting items.</p>
         </div>
-        <div id="items">
+    {% else %}
+        <div id="home-content">
+            <p>Welcome to <strong>{{ user.first_name }}'s</strong> Lending Library item list page!</p>
+        </div>
+    {% endif %}
+    <div id="items">
+        {% if items.count > 0 %}
             {% for item in items %}
                 <div class="item-box">
                     <h3 class="item-title">{{ item.title }}</h3>
@@ -40,46 +45,18 @@
                     <p class="item-period">{{ item.period }}-day Rental</p>
                     <form action="{% url "library:account-item-delete" item.id %}" method="POST">
                         {% csrf_token %}
-                        <p>
+                        <p id="item-selections">
                             <a href="{% url "library:account-item-detail" item.id %}" class="account-item-info">Info</a>
                             | <a href="{% url "library:account-item-edit" item.id %}" class="account-item-edit">Edit</a>
-{#                            {% if request.session.role == "admin" %}#}
-                                | <input type="submit" name="delete" id="account-item-delete" value="Delete">
-{#                            {% endif %}#}
+                            | <input type="submit" name="delete" id="account-item-delete" value="Delete">
                         </p>
                     </form>
                 </div><!-- #item-box -->
             {% endfor %}
-        </div><!-- #items -->
-
-    {% else %}
-
-        <div id="add-user">
-            <h2>Create Lending Library Account</h2>
-            <form id="login-box">
-                <div class="user-info">
-                    <p>First Name</p><input type="text" name="first-name" placeholder="First Name">
-                </div>
-                <div class="user-info">
-                    <p>Last Name</p><input type="text" name="last-name" placeholder="Last Name">
-                </div>
-                <div class="user-info">
-                    <p>Location</p><input type="text" name="location" placeholder="Location">
-                </div>
-                <div class="user-info">
-                    <p>Email</p><input type="text" name="email" placeholder="Email">
-                </div>
-                <div class="user-info">
-                    <p>Username</p><input type="text" name="username" placeholder="Username">
-                </div>
-                <div class="user-info">
-                    <p>Password</p><input type="password" name="pw" placeholder="Password">
-                </div>
-                <input type="submit" name="submit" value="Register">
-            </form>
-        </div>
-    {% endif %}
-
+        {% else %}
+            <h3>Oops! There's nothing here! Add a new item to populate this list!</h3>
+        {% endif %}
+    </div><!-- #items -->
 {% endblock %}
 
 {% block right-content %}

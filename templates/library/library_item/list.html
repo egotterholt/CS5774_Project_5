@@ -17,7 +17,7 @@
         <li><a href="{% url "library:item-list" %}">Books</a></li>
         <li><a href="{% url "library:item-list" %}">Games</a></li>
         <li><a href="{% url "library:item-list" %}">Movies</a></li>
-        <li><a href="{% url "library:item-list" %}" class="selected">Tools</a>
+        <li><a href="{% url "library:item-list" %}">Tools</a>
             <ul id="sub-list">
                 <li><a href="{% url "library:item-list" %}">Cleaning</a></li>
                 <li><a href="{% url "library:item-list" %}">Construction</a></li>
@@ -44,7 +44,7 @@
     </form>
     <div id="items">
         {% for item in items %}
-            {% if item.category|lower == "lawn" %}
+            {% if item.category|lower == "lawn" or item.category|lower == "tools" %}
                 <div class="item-box">
                     <h3 class="item-title">{{ item.title }}</h3>
                     <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->

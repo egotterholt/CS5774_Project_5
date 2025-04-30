@@ -28,17 +28,18 @@
 
             {% if request.session.username %}
                 <form id="right-header">
-                    <p>Logged in as <strong>{{ request.session.username }}</strong></p>
-                    <a href="{% url "library:logout" %}">Log Out</a>
+                    <p>Logged in as</p>
+                    <a href="{% url "users:profile" request.session.username %}" class="profile-login"><strong>{{ request.session.username }}</strong></a>
+                    <a href="{% url "users:logout" %}">Log Out</a>
                 </form>
             {% else %}
-                <form id="right-header" action="{% url "library:login" %}" method="POST">
+                <form id="right-header" action="{% url "users:login" %}" method="POST">
                     {% csrf_token %}
                     <input type="text" name="username" placeholder="Username">
                     <input type="password" name="pw" placeholder="Password">
                     <input type="submit" name="submit" value="Log In">
                     <p>or</p>
-                    <a href="{% url "library:account" %}">Register</a>
+                    <a href="{% url "users:register" %}">Register</a>
                 </form>
             {% endif %}
 

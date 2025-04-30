@@ -43,11 +43,11 @@
                     <div id="add-item-category">
                         <h3>Choose a Category:</h3>
                         <select name="categories" id="categories">
-                            <option value="books">Books</option>
-                            <option value="games">Games</option>
-                            <option value="movies">Movies</option>
-                            <option value="tools">Tools</option>
-                            <option value="tv-shows">TV Shows</option>
+                            <option value="Books">Books</option>
+                            <option value="Games">Games</option>
+                            <option value="Movies">Movies</option>
+                            <option value="Tools">Tools</option>
+                            <option value="TV Shows">TV Shows</option>
                         </select>
                     </div>
                     <h3>Input Item Description</h3>
@@ -55,7 +55,7 @@
                 </div><!-- #add-item-details -->
                 <div id="add-rental-details">
                     <div id="ratings">
-                        <h3>Your Rating</h3>
+                        <h3>{{ item.user.first_name }}'s Rating</h3>
                         <p>{{ item.owner_rating }} / 5 Stars</p>
                     </div>
                     <div id="rental-options-add">

@@ -69,7 +69,7 @@ function searchResults() {
         var noItemResults = '<h3>No results for "' + keyword + '", please try another search</h3>';
 
         // If keyword matches expected values, print good alert
-        if (keyword.toLowerCase() == ('Weed Eater').toLowerCase()) {
+        if (keyword.toLowerCase() === ('Weed Eater').toLowerCase()) {
             $('div#items').append(itemResults);
         } else {
             $('div#items').append(noItemResults);
@@ -80,29 +80,6 @@ function searchResults() {
 // When the rent button is clicked on an item page, display popup information
 function rentalNotice(active) {
     $('div#rental-options input[type="submit"]').click(function () {
-        // var className = $(this).attr('class');
-        // var ownerRating = $(this).parent().siblings('#ratings').children('h3:first').text();
-        // var ownerName = ownerRating.slice(0, ownerRating.indexOf('\''));
-        //
-        // if (!active) {
-        //     active = true;
-        //     if (className != 'disabled') {
-        //         var rentalMsg = '<p>Renting from ' + ownerName + '</p>';
-        //         $(this).addClass('disabled');
-        //         $(rentalMsg).appendTo($(this).parent().parent()).fadeOut(3000, function () {
-        //             $(rentalMsg).remove();
-        //             active = false;
-        //         });
-        //     } else {
-        //         var disabledMsg = '<p>Already renting from ' + ownerName + '</p>';
-        //         $(disabledMsg).appendTo($(this).parent().parent()).fadeOut(3000, function () {
-        //             $(disabledMsg).remove();
-        //             active = false;
-        //         });
-        //     }
-        // }
-
-
         var item_id = $(this).attr('data-item-id');
         var owner = $(this).attr('data-item-owner');
         var rented_by = $(this).attr('data-item-rented-by');
@@ -175,15 +152,22 @@ function rentalNotice(active) {
     })
 }
 
+function deleteEvent(event) {
+    if (confirm('Warning: Are you sure you want to delete this item/user?')) {
+        alert("Successfully deleted item/user");
+    } else {
+        event.preventDefault();
+        alert("Successfully cancelled item/user deletion");
+    }
+}
+
 // Confirmation browser popup window to prevent accidental deletion by an administrator
 function deleteWarning() {
     $('input[type="submit"]#account-item-delete').click(function (event) {
-        if (confirm('Warning: Are you sure you want to delete this item?')) {
-            alert("Successfully deleted item");
-        } else {
-            event.preventDefault();
-            alert("Successfully cancelled item deletion");
-        }
+        deleteEvent(event)
+    })
+    $('input[type="submit"]#delete-item-comment').click(function (event) {
+        deleteEvent(event)
     })
 }
 

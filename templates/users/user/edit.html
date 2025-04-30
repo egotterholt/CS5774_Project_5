@@ -1,0 +1,91 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Add{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}">Home</a></li>
+        <li><a href="{% url "library:item-list" %}">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}" class="selected">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+<!-- If there is a user logged in, open their account page. otherwise open registration -->
+{% block side-tabs %}
+    <div id="side-tabs">
+        <ul id="full-list">
+            <li><a href="{% url "library:item-list" %}">Books</a></li>
+            <li><a href="{% url "library:item-list" %}">Games</a></li>
+            <li><a href="{% url "library:item-list" %}">Movies</a></li>
+            <li><a href="{% url "library:item-list" %}">Tools</a></li>
+            <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+        </ul>
+    </div><!-- #side-tabs -->
+{% endblock %}
+
+{% block content %}
+{#    {% if request.session.username %}#}
+{##}
+{#        <div id="home-content">#}
+{#            <p>Welcome to your Lending Library account page, <strong>{{ request.session.username }}</strong>!<br>#}
+{#            Here you can manage your profile by adding, editing, or deleting items.</p>#}
+{#        </div>#}
+{#        <div id="items">#}
+{#            {% for item in items %}#}
+{#                <div class="item-box">#}
+{#                    <h3 class="item-title">{{ item.title }}</h3>#}
+{#                    <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->#}
+{#                    <p class="item-period">{{ item.period }}-day Rental</p>#}
+{#                    <form action="{% url "library:account-item-delete" item.id %}" method="POST">#}
+{#                        {% csrf_token %}#}
+{#                        <p>#}
+{#                            <a href="{% url "library:account-item-detail" item.id %}" class="account-item-info">Info</a>#}
+{#                            | <a href="{% url "library:account-item-edit" item.id %}" class="account-item-edit">Edit</a>#}
+{#                            | <input type="submit" name="delete" id="account-item-delete" value="Delete">#}
+{#                        </p>#}
+{#                    </form>#}
+{#                </div><!-- #item-box -->#}
+{#            {% endfor %}#}
+{#        </div><!-- #items -->#}
+{##}
+{#    {% else %}#}
+
+        <div id="add-user">
+            <h2>Editing {{ user.username }}'s Lending Library Profile</h2>
+            <form id="login-box" action="{% url "users:profile-edit" user.username %}" method="post">
+                <div class="user-info">
+                    <label for="register-first-name">First Name</label>
+                    <input id="register-first-name" type="text" name="first-name" placeholder="{{ user.first_name }}">
+                </div>
+                <div class="user-info">
+                    <label for="register-last-name">Last Name</label>
+                    <input id="register-last-name" type="text" name="last-name" placeholder="{{ user.last_name }}">
+                </div>
+                <div class="user-info">
+                    <label for="register-location">Location</label>
+                    <input id="register-location" type="text" name="location" placeholder="{{ user.details.location }}">
+                </div>
+                <div class="user-info">
+                    <label for="register-email">Email</label>
+                    <input id="register-email" type="text" name="email" placeholder="{{ user.email }}">
+                </div>
+                <div class="user-info">
+                    <label for="register-password">Password</label>
+                    <input id="register-password" type="password" name="password" placeholder="Password">
+                </div>
+                <input id="register-button" type="submit" name="submit" value="Save Edits">
+                <input id="register-button" type="submit" name="submit" value="Cancel Edits">
+                {% csrf_token %}
+            </form>
+        </div>
+{#    {% endif %}#}
+
+{% endblock %}
+
+{% block right-content %}
+    <div id="right-content">
+        <!-- Adjust width to center content -->
+    </div>
+{% endblock %}

@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -10,10 +12,14 @@ class LibraryItem(models.Model):
     cost = models.IntegerField(default=0)
     description = models.TextField(default='No description available')
     owner = models.CharField(max_length=100, default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     owner_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
     product_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
     created_at = models.DateTimeField(auto_now_add=True)
     rented_by = models.CharField(max_length=100, default='')
 
-regular_user = {"username": "rick", "password": "regular"}
-admin_user = {"username": "andy", "password": "admin"}
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('library:item-detail', args=[self.id])

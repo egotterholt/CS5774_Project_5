@@ -14,18 +14,20 @@
 
 {% block side-tabs %}
     <ul id="full-list">
-        <li><a href="{% url "library:item-list" %}">Books</a></li>
-        <li><a href="{% url "library:item-list" %}">Games</a></li>
-        <li><a href="{% url "library:item-list" %}">Movies</a></li>
-        <li><a href="{% url "library:item-list" %}" class="selected">Tools</a>
+        <li><a href="{% url "library:item-list" %}" class="{% if item.category == "Books" %}selected{% endif %}">Books</a></li>
+        <li><a href="{% url "library:item-list" %}" class="{% if item.category == "Games" %}selected{% endif %}">Games</a></li>
+        <li><a href="{% url "library:item-list" %}" class="{% if item.category == "Movies" %}selected{% endif %}">Movies</a></li>
+        <li><a href="{% url "library:item-list" %}" class="{% if item.category == "Tools" %}selected{% endif %}">Tools</a>
+        {% if item.category == "Lawn" %}
             <ul id="sub-list">
                 <li><a href="{% url "library:item-list" %}">Cleaning</a></li>
                 <li><a href="{% url "library:item-list" %}">Construction</a></li>
                 <li><a href="{% url "library:item-list" %}" class="selected">Lawn</a></li>
                 <li><a href="{% url "library:item-list" %}">Outdoor</a></li>
             </ul>
+        {% endif %}
         </li>
-        <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+        <li><a href="{% url "library:item-list" %}" class="{% if item.category == "TV Shows" %}selected{% endif %}">TV Shows</a></li>
     </ul>
 {% endblock %}
 
@@ -35,34 +37,24 @@
         <div id="item-details-container">
             <div id="item-details">
                 <img src="{% static "" %}{{ item.photo }}" alt="{{ item.title }}"><!-- Check README for photo credits -->
-                <p>
-                    I am renting out my Echo gas-powered weed eater, purchased in 2021. Upon rental, this weed eater
-                    comes with a fully loaded bump-head style string feeder as well as a full tank of gas. If more
-                    string is needed for a larger job, I can suggest some good strings to look at in Lowe's or Home
-                    Depot. I can provide more gas for $5 a tank if more is needed (does NOT take regular gas). <br><br>
-                    The full gas tank should last about 2 hours of constant running. <br>The fully loaded string feeder
-                    should last about 2 hours of regular use.
-                </p>
+                <p>{{ item.description }}</p>
             </div><!-- #item-details -->
             <div id="rental-details">
-                {% if owner %}
+                {% if request.session.username == user.username or request.session.role == "admin" %}
                     <div id="edit-details">
                         <a href="{% url "library:account-item-edit" item.id %}" id="edit-item">Edit Item Details</a>
                     </div>
-                    <div id="ratings">
-                        <h3>Your Rating</h3>
-                        <p>{{ item.owner_rating }} / 5 Stars</p>
-                        <h3>Product's Rating</h3>
-                        <p>{{ item.product_rating }} / 5 Stars</p>
-                    </div>
-                {% else %}
-                    <div id="ratings">
-                        <h3>{{ item.owner }}'s Rating</h3>
-                        <p>{{ item.owner_rating }} / 5 Stars</p>
-                        <h3>Product's Rating</h3>
-                        <p>{{ item.product_rating }} / 5 Stars</p>
-                    </div>
                 {% endif %}
+                <div id="ratings">
+                    {% if request.session.username == user.username %}
+                        <h3>Your Rating</h3>
+                    {% else %}
+                        <h3 class="owner-profile"><a href="{% url "users:profile" item.user.username %}">{{ item.user.first_name }}'s Rating</a></h3>
+                    {% endif %}
+                    <p>{{ item.owner_rating }} / 5 Stars</p>
+                    <h3>Product's Rating</h3>
+                    <p>{{ item.product_rating }} / 5 Stars</p>
+                </div>
                 <div id="rental-options">
                     <h3>Lending Start:</h3>
                     <p>03/20/2025</p>
@@ -76,24 +68,61 @@
                             {% if request.session.username == item.rented_by %}
                                 <input type="submit" name="submit" class="disabled"
                                        data-item-id="{{ item.id }}"
-                                       data-item-owner="{{ item.owner }}"
+                                       data-item-owner="{{ item.user.first_name }}"
                                        data-item-rented-by="{{ item.rented_by }}"
                                        data-ajax-url="{% url "library:item-rent" item.id %}"
-                                       value="Rent from {{ item.owner }} - ${{ item.cost }}">
+                                       value="Rent from {{ item.user.first_name }} - ${{ item.cost }}">
                             {% else %}
                                 <input type="submit" name="submit"
                                        data-item-id="{{ item.id }}"
-                                       data-item-owner="{{ item.owner }}"
+                                       data-item-owner="{{ item.user.first_name }}"
                                        data-item-rented-by="{{ item.rented_by }}"
                                        data-ajax-url="{% url "library:item-rent" item.id %}"
-                                       value="Rent from {{ item.owner }} - ${{ item.cost }}">
+                                       value="Rent from {{ item.user.first_name }} - ${{ item.cost }}">
                             {% endif %}
                         {% else %}
-                            <a href="{% url "library:account" %}" id="register-item">Register to rent from {{ item.owner }}</a>
+                            <a href="{% url "library:account" %}" id="register-item">Register to rent from {{ item.user.first_names }}</a>
                         {% endif %}
                     {% endif %}
                 </div>
+                <p>Date Posted: {{ item.created_at|date:"M d, Y" }}</p>
             </div><!-- #rental-details -->
         </div><!-- #item-details-container -->
+        <div id="profile-actions">
+            <h3><strong>Comments and Reviews</strong></h3>
+            <dl>
+            {% for action in actions %}
+                <form action="{% url "library:item-add-comment" item.id %}" method="POST">
+                    {% csrf_token %}
+                    {% if action.comment %}
+                        <input type="hidden" name="action-id" value="{{ action.id }}">
+                        <dd><a href="{% url "users:profile" action.user.username %}">{{ action.user.username }}</a> | {{ action.created }}</dd>
+                        {% if action_id == action.id %}
+                            <textarea name="item-comment-description" rows="3" cols="40">{{ action.comment }}</textarea>
+                            <dt><input type="submit" name="comment-button" id="edit-item-comment" value="Save Edited Comment">
+                            <input type="submit" name="comment-button" id="edit-item-comment" value="Cancel Edit"></dt>
+                        {% else %}
+                            <dt><p>{{ action.comment }}</p></dt>
+                            {% if request.session.username == action.user.username or request.session.role == "admin" %}
+                                <dt><input type="submit" name="comment-button" id="edit-item-comment" value="Edit Comment">
+                                <input type="submit" name="comment-button" id="delete-item-comment" value="Delete Comment"></dt>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </form>
+            {% empty %}
+                <dd>No comments yet.</dd>
+            {% endfor %}
+            </dl>
+            {% if request.session.role == "admin" or request.session.role == "regular" %}
+                {% if request.session.username != user.username %}
+                    <form id="add-comment-form" action="{% url "library:item-add-comment" item.id %}" method="POST">
+                        {% csrf_token %}
+                        <textarea id="add-item-description" name="item-comment-description">Leave comments and reviews for the owner and other users to see!</textarea>
+                        <input type="submit" name="comment-button" id="add-item-comment" value="Add Comment">
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
     </div><!-- #selected-item-container -->
 {% endblock %}

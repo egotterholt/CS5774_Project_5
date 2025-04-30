@@ -1,0 +1,79 @@
+{% extends "library/base.html" %}
+{% load static %}
+
+{% block page-title %}Profile for {{ user.username }}{% endblock %}
+
+{% block primary-nav %}
+    <ul id="primary-nav">
+        <li><a href="{% url "library:home" %}">Home</a></li>
+        <li><a href="{% url "library:item-list" %}">Items</a></li>
+        <li><a href="{% url "library:item-add" %}">Add Item</a></li>
+        <li><a href="{% url "library:account" %}" class="selected">Account</a></li>
+    </ul><!-- #primary-nav -->
+{% endblock %}
+
+{% block side-tabs %}
+    <ul id="full-list">
+        <li><a href="{% url "library:item-list" %}">Books</a></li>
+        <li><a href="{% url "library:item-list" %}">Games</a></li>
+        <li><a href="{% url "library:item-list" %}">Movies</a></li>
+        <li><a href="{% url "library:item-list" %}">Tools</a></li>
+        <li><a href="{% url "library:item-list" %}">TV Shows</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div id="selected-item-container">
+        <h1>Profile for {{ user.username }}</h1>
+        {% if request.session.role == "admin" or request.session.username == user.username %}
+            <div id="edit-profile">
+                <dl>
+                    <dt><strong>Username</strong></dt>
+                    <dd>{{ user.username }}</dd>
+
+                    <dt><strong>First Name</strong></dt>
+                    <dd>{{ user.first_name }}</dd>
+
+                    <dt><strong>Last Name</strong></dt>
+                    <dd>{{ user.last_name }}</dd>
+
+                    <dt><strong>Email</strong></dt>
+                    <dd>{{ user.email }}</dd>
+
+                    <dt><strong>Location</strong></dt>
+                    <dd>{{ user.details.location }}</dd>
+
+                    <dt><strong>Role</strong></dt>
+                    <dd>{{ user.details.role }}</dd>
+                </dl>
+            </div>
+        {% endif %}
+        <form action="{% url "users:profile-delete" user.username %}" method="POST">
+            {% csrf_token %}
+            <p id="item-selections">
+                <a href="{% url "users:profile-items" user.username %}" class="account-item-info">Items</a>
+                {% if request.session.role == "admin" or request.session.username == user.username%}
+                    | <a href="{% url "users:profile-edit" user.username %}" class="account-item-info">Edit</a>
+                    | <input type="submit" name="delete" id="account-item-delete" value="Delete">
+                {% endif %}
+            </p>
+        </form>
+        {% if actions.count > 0 %}
+            <div id="profile-actions">
+                <h3><strong>Profile History</strong></h3>
+                <dl>
+                    {% for action in actions %}
+                        <dd><a href="{{ action.user.get_absolute_url }}">{{ action.user.username }}</a> | {{ action.created }}</dd>
+                        <dt><p>{{ action.verb }} <a href="{{ action.target.get_absolute_url }}">"{{ action.target }}"</a></p></dt>
+                    {% endfor %}
+                </dl>
+            </div>
+        {% endif %}
+    </div><!-- #selected-item-container -->
+{% endblock %}
+
+{% block right-content %}
+    <div id="right-content">
+        <!-- Adjust width to center content -->
+    </div>
+{% endblock %}
